@@ -10,7 +10,7 @@ wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/assets/css/s
 
 add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles' );
 
-function electronic_post_type(){
+function imasunagaru_post_type(){
     //カスタム投稿登録
     register_post_type(
         // カスタム投稿名設定
@@ -30,13 +30,28 @@ function electronic_post_type(){
             ),
         )
 		);
+    register_post_type(
+            // カスタム投稿名設定
+        'movie',
+        array(
+            'label' => '動画',//管理画面の名前
+            'public' => true,//サイトに表示するかどうか
+            'has_archive' => true,
+            'show_in_rest' => true,
+            'menu_position' => 6,//管理メニューの何番目か
+            'menu_icon' => 'dashicons-smiley',
+            'supports' => array(
+            'title',
+            'editor',
+            'thumbnail',
+            'revisions',
+            ),
+        )
+        );
 }
+add_action('init','imasunagaru_post_type');
 
 function video_display(){
-	?>
-
-
-<?php
 	$args = array(
         'post_type' => 'movie',//投稿タイプ
         'post_per_page' => 1,//表示する記事数
@@ -47,9 +62,5 @@ function video_display(){
 	get_template_part('template-parts/movie');
 	endwhile; 
 	wp_reset_postdata();
-	?>
-	</div>
-	<?php
 }
-
 add_action( 'lightning_site_body_prepend', 'video_display' );
